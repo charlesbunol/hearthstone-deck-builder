@@ -1,0 +1,403 @@
+:root {
+    --bg-color: #0b0c10;
+    /* Paleta Hearthstone Logo */
+    --panel-bg: rgba(43, 27, 20, 0.85); /* Madeira rústica escura */
+    --panel-border: #c39a3f; /* Ouro envelhecido das bordas */
+    --text-main: #f5f5dc; /* Tons de pergaminho */
+    --text-highlight: #fbe06f; /* Ouro brilhante */
+    --accent: rgba(69, 45, 30, 0.8); /* Madeira mais clara */
+    
+    --hs-blue-dark: #062b48;
+    --hs-blue-light: #4bd8f1;
+    
+    --hs-common: #ffffff;
+    --hs-rare: #0070dd;
+    --hs-epic: #a335ee;
+    --hs-legendary: #ff8000;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Youtube Video Background */
+.video-background {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -3;
+    overflow: hidden;
+    background: var(--bg-color);
+}
+.video-background-player {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+.video-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(11, 12, 16, 0.4); 
+    z-index: -2;
+    pointer-events: none;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Metamorphous', 'Georgia', serif;
+    letter-spacing: 1px;
+}
+
+/* Telas e Visibilidade */
+.screen {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+}
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Loader */
+#loading-screen {
+    justify-content: center;
+    align-items: center;
+}
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--panel-bg);
+    border-top: 5px solid var(--text-highlight);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Seleção de Classe */
+#class-selection-screen {
+    padding: 40px;
+    align-items: center;
+}
+#class-selection-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 40px;
+    color: var(--text-highlight);
+    text-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
+}
+.classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 1000px;
+}
+.class-card {
+    background: var(--panel-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+.class-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--panel-border);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(69, 162, 158, 0.3);
+}
+
+/* Main Layout */
+.main-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header */
+.top-bar {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background: rgba(11, 12, 16, 0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    gap: 20px;
+    backdrop-filter: blur(10px);
+}
+#current-class-title {
+    color: var(--text-highlight);
+    flex-grow: 1;
+}
+.mana-filter {
+    display: flex;
+    gap: 10px;
+}
+.mana-btn {
+    width: 35px;
+    height: 35px;
+    background: var(--hs-blue-dark);
+    border: 2px solid var(--hs-blue-light);
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.mana-btn:hover, .mana-btn.active {
+    transform: scale(1.1);
+    box-shadow: 0 0 12px var(--hs-blue-light);
+}
+.search-input {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--panel-border);
+    background: var(--accent);
+    color: white;
+    outline: none;
+}
+
+/* Format Toggle */
+.format-toggle {
+    display: flex;
+    background: var(--accent);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--panel-border);
+}
+.format-btn {
+    padding: 8px 15px;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+}
+.format-btn.active {
+    background: var(--panel-border);
+    color: var(--bg-color);
+}
+
+/* Área de Conteúdo */
+.content-area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Grid de Cartas */
+.cards-display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+}
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    flex: 1;
+}
+.hs-card {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.hs-card img {
+    width: 100%;
+    max-width: 250px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+}
+.hs-card:hover {
+    transform: scale(1.05);
+}
+.hs-card.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 0;
+}
+.btn {
+    padding: 8px 16px;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    color: var(--text-highlight);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn:hover {
+    background: var(--panel-border);
+    color: var(--bg-color);
+}
+.primary-btn {
+    background: var(--text-highlight);
+    color: var(--bg-color);
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Sidebar Deck Tracker */
+.deck-tracker {
+    width: 300px;
+    background: rgba(11, 12, 16, 0.95);
+    border-left: 1px solid rgba(255,255,255,0.05);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+.deck-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.deck-count {
+    background: var(--panel-bg);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+.deck-count.full {
+    color: #ff4c4c;
+}
+
+/* Gráfico de Mana */
+.mana-curve-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 100px;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    padding-bottom: 5px;
+}
+.mana-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+}
+.mana-bar {
+    width: 100%;
+    background: #2b5c8f;
+    border-radius: 2px 2px 0 0;
+    transition: height 0.3s ease;
+    min-height: 2px;
+}
+.mana-label {
+    font-size: 0.7rem;
+    margin-top: 4px;
+    color: #888;
+}
+
+/* Lista do Deck */
+.deck-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.deck-item {
+    display: flex;
+    background: #1a232c;
+    border: 1px solid #2a3540;
+    border-radius: 4px;
+    height: 35px;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+}
+.deck-item:hover {
+    background: #24303b;
+}
+.deck-item-mana {
+    width: 30px;
+    background: #2b5c8f;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    line-height: 35px;
+    height: 100%;
+}
+.deck-item-name {
+    padding-left: 10px;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
+    text-shadow: 1px 1px 2px black;
+    z-index: 2;
+}
+.deck-item-count {
+    background: rgba(0,0,0,0.5);
+    color: #ffd700;
+    padding: 0 8px;
+    font-weight: bold;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid #2a3540;
+    z-index: 2;
+}
+.rarity-FREE, .rarity-COMMON { color: var(--hs-common); }
+.rarity-RARE { color: var(--hs-rare); }
+.rarity-EPIC { color: var(--hs-epic); }
+.rarity-LEGENDARY { color: var(--hs-legendary); }
+
+/* Gradiente na barra do tracker pra simular o fundo do card */
+.deck-item::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 30px; right: 0; bottom: 0;
+    background: linear-gradient(to right, #1a232c 20%, transparent 100%);
+    z-index: 1;
+}
+
+/* Scrollbar Customizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--panel-border);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-highlight);
+}

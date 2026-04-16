@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hearthstone Deck Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Metamorphous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="video-background">
+        <video autoplay muted loop playsinline class="video-background-player">
+            <source src="background.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="video-overlay"></div>
+    <div id="app">
+        <!-- Tela de Carregamento -->
+        <div id="loading-screen" class="screen active">
+            <div class="loader"></div>
+            <h2>Carregando a Taverna...</h2>
+        </div>
+
+        <!-- Seleção de Classe -->
+        <div id="class-selection-screen" class="screen">
+            <h1>Escolha seu Herói</h1>
+            <div class="classes-grid" id="classes-grid">
+                <!-- Populado por JS -->
+            </div>
+        </div>
+
+        <!-- Construtor de Deck -->
+        <div id="deck-builder-screen" class="screen main-layout">
+            
+            <header class="top-bar">
+                <button id="btn-back" class="btn">Voltar</button>
+                <h2 id="current-class-title">Classe</h2>
+                
+                <div class="format-toggle" id="format-toggle">
+                    <button class="format-btn active" data-format="STANDARD">Padrão</button>
+                    <button class="format-btn" data-format="WILD">Livre</button>
+                </div>
+
+                <div class="mana-filter" id="mana-filter">
+                    <button class="mana-btn" data-mana="0">0</button>
+                    <button class="mana-btn" data-mana="1">1</button>
+                    <button class="mana-btn" data-mana="2">2</button>
+                    <button class="mana-btn" data-mana="3">3</button>
+                    <button class="mana-btn" data-mana="4">4</button>
+                    <button class="mana-btn" data-mana="5">5</button>
+                    <button class="mana-btn" data-mana="6">6</button>
+                    <button class="mana-btn" data-mana="7">7+</button>
+                </div>
+                <input type="text" id="search-input" placeholder="Buscar carta..." class="search-input">
+            </header>
+
+            <div class="content-area">
+                <div class="cards-display">
+                    <div class="cards-grid" id="cards-grid">
+                        <!-- Cartas renderizadas aqui -->
+                    </div>
+                    <div class="pagination">
+                        <button id="btn-prev" class="btn">&laquo; Anterior</button>
+                        <span id="page-info">Página 1</span>
+                        <button id="btn-next" class="btn">Próxima &raquo;</button>
+                    </div>
+                </div>
+
+                <aside class="deck-tracker">
+                    <div class="deck-header">
+                        <h3>Seu Deck</h3>
+                        <span id="deck-count" class="deck-count">0/30</span>
+                    </div>
+                    
+                    <div class="mana-curve-chart" id="mana-curve-chart">
+                        <!-- Barras populadas por JS -->
+                    </div>
+
+                    <div class="deck-list" id="deck-list">
+                        <!-- Cartas do deck aqui -->
+                    </div>
+                    
+                    <button id="btn-copy-deck" class="btn primary-btn">Copiar Código</button>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
